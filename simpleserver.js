@@ -1,7 +1,9 @@
 var express = require('express');
+var cors = require('cors');
 
 var app = express();
 app.use(express.json());
+app.use(cors());
 
 var fs = require('fs');
 var filePath = './cart.json';
@@ -62,24 +64,6 @@ app.route('/cart/:id')
     }
   })
 
-  .post(function (req, res) {
-    var objArray = loadFile(filePath);
-    var matchFound = false;
-    matchFound = objArray.some(function (arrayItem, _index, arr) {
-      if (arrayItem.id == req.params.id) {
-        arrayItem.name = req.body.name;
-        arrayItem.quantity = req.body.quantity;
-        res.json(arr);
-        saveFile(filePath, arr);
-        return true;
-      }
-      });
-      if(!matchFound) {
-        res.status(404).send("No item found with Id:"+req.params.id);
-      }
-  
-  })
-
   .put(function (req, res) {
     var objArray = loadFile(filePath);
     let itemId = parseInt(req.params.id);
@@ -137,6 +121,6 @@ app.use(function (req, res, next) {
   res.status(404).send("Hmm... Did Alexa ask you to visit this URL? Don't listen to her");
 });
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+app.listen(3200, function () {
+  console.log('Shopping cart server listening on port 3200!');
 });
